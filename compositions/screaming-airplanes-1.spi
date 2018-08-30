@@ -1,0 +1,67 @@
+# COMPOSITION: Screaming Airplanes and Air Raid Sirens 1
+# COMMENT: Like airplanes full of distorted church organs circling overhead forever during a war
+
+# Branch: ignored
+# Type: ignored
+# Duration: duration of sound
+
+# Copyright William Denton <wtd@pobox.com> 2015
+
+# How often to refresh from the data file (which must be refresh at the same rate)
+minutes = 1
+
+# Data file
+file = ENV['HOME'] + "/music/staplr/staplr-activity-01.txt"
+
+activity = Hash.new { |h,k| h[k] = Hash.new("") }
+
+use_random_seed Time.now.to_i
+
+bpm = 60
+use_bpm bpm
+
+# The same sound algorithm is used for all interaction:  a starting
+# note is chosen randomly, a finishing note is also chosen randomly
+# (it is probably lower), and for the duration of the encounter
+# a distorted flanged sound slides from the first to the second.
+define :siren do |minutes|
+
+  start  = chord([:Fs3, :Fs4, :Fs5, :Fs6].choose, :minor).choose
+  finish = chord([:Fs2, :Fs3, :Fs4, :Fs5].choose, :minor).choose
+  puts "Slide: #{start} -> #{finish} for #{minutes} minutes"
+
+  beats = 60 * minutes
+  with_fx :krush do
+    with_fx :reverb do
+      with_fx :flanger, feedback: minutes, phase: minutes, mix: 0.5, delay: minutes, depth: minutes*4, decay: minutes do
+        with_fx :distortion, mix: 0.8, distort: 0.9 do
+          with_fx :wobble, phase: minutes, phase_slide: 8, pulse_width_slide: 0.4, smooth_up: 5 do |e|
+            use_synth :tb303
+            s = play start, attack: beats/10, sustain: beats/10, release: 4*beats/5, note_slide: beats
+            control s, note: finish
+          end
+        end
+      end
+    end
+  end
+end
+
+loop do
+
+  File.open(file).each_line do |line|
+    question, times_csv = line.split("|")
+    activity[question.to_i]["times"] = times_csv.chomp.split(",").map { |x| x.to_i }  end
+
+  in_thread(name: :siren) do
+    (1..5).each do |type|
+      puts type
+      activity[type]["times"].each do |duration|
+        puts duration
+        siren(duration)
+      end
+    end
+  end
+
+  sleep minutes * bpm
+
+end

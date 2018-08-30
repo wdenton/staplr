@@ -1,0 +1,18 @@
+#+TITLE: STAPLR: Sounds in Time Actively Performing Library Reference
+#+AUTHOR: William Denton
+#+EMAIL: wtd@pobox.com
+
+#+OPTIONS: num:nil toc:nil ^:nil
+#+STARTUP: content align shrink showall
+
+* Introduction
+
+* Installation
+
+* Ideas for future sounds
+
++ In C (record a lot of them then play them all on top of each other---Music at the Same Time)
++ One sound, but extended or shorted (like "Convergence Machine," sort of), perhaps Bach's first cello suite
++ bird song, so it sounds like a single bird or the whole dawn chorus
++ Kushaqua sounds
++ silences from the desk in question, or just ambient sound from that library

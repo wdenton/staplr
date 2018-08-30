@@ -1,0 +1,184 @@
+# sonic_pi
+
+# COMPOSITION: Glassian 2
+# COMMENT: A bit Philip Glassy, but not a lot.
+#
+# Branch: ignored
+# Type: different algorithm for each
+# Duration: duration of sound
+
+# Copyright William Denton <wtd@pobox.com> 2016
+
+composition = "Glassian 2"
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+use_synth :fm
+
+minutes = 1
+
+file = ENV['HOME'] + "/music/staplr/staplr-branch-activity-01.json"
+
+bpm = 60
+use_bpm bpm
+
+activity = Hash.new
+
+eighths = [0, 1, 2, 3, 4, 3, 2, 1]
+fourths = [0, 1, 2, 1]
+progression = [:i, :ii, :vi, :iv]
+
+chord_choices = [:d3, :d4, :d5] #, :b3, :b4]
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :ones do |minutes|
+  use_synth :tri
+  pan_placement = rrand(-1, 1)
+  minutes.times do
+    c = chord_choices.choose
+    volume = rrand(0.4, 0.6)
+    4.times do |where|
+      d = chord_degree(progression[where], c, [:major, :minor].choose, 5)
+      4.times do
+        4.times do |bar|
+          8.times do |note|
+            play d[eighths[note]], amp: volume, pan: pan_placement
+            sleep 0.125
+          end
+        end
+      end
+    end
+  end
+end
+
+define :twos do |minutes|
+  pan_placement = rrand(-1, 1)
+  minutes.times do
+    c = chord_choices.choose
+    volume = rrand(0.4, 0.6)
+    4.times do |where|
+      d = chord_degree(progression[where], c, [:major, :minor].choose, 4)
+      4.times do
+        4.times do
+          4.times do |i|
+            play d[fourths[i]], amp: volume, pan: pan_placement
+            sleep 0.25
+          end
+        end
+      end
+    end
+  end
+end
+
+define :threes do |minutes|
+  log_raw "#{composition} Threes: #{minutes}\n"
+  use_synth :beep
+  pan_placement = rrand(-1, 1)
+  minutes.times do
+    c = chord_choices.choose
+    volume = rrand(0.4, 0.6)
+    use_synth_defaults amp: volume, sustain: 0.1, pan: pan_placement
+    4.times do |where|
+      d = chord_degree(progression[where], c, [:major, :minor].choose, 7)
+      4.times do
+        4.times do |bar|
+          1.times do |beat|
+            play d[eighths[bar]]
+            sleep 0.333
+            play d[eighths[bar + 1]]
+            sleep 0.333
+            play d[eighths[bar + 2]]
+            sleep 0.333
+          end
+        end
+      end
+    end
+  end
+end
+
+define :fours do |minutes|
+  pan_placement = rrand(-1, 1)
+  minutes.times do
+    use_synth :fm
+    c = chord_choices.choose
+    volume = rrand(0.3, 0.5)
+    4.times do |where|
+      d = chord_degree(progression[where], c, [:major, :minor].choose, 4)
+      4.times do
+        4.times do |bar|
+          1.times do |note|
+            play d[fourths[bar]], amp: volume, sustain: 1, pan: pan_placement
+            sleep 1
+          end
+        end
+      end
+    end
+  end
+end
+
+define :fives do |minutes|
+  pan_placement = rrand(-1, 1)
+  minutes.times do
+    use_synth :mod_fm
+    volume = rrand(0.3, 0.5)
+    with_fx :reverb, phase: 1 do
+      c = chord_choices.choose
+      4.times do |where|
+        d = chord_degree(progression[where], c, [:major, :minor].choose, 4)
+        4.times do |fourbar|
+          2.times do
+            play d[0], attack: 0.5, sustain: 1, decay: 1, amp: volume, pan: pan_placement
+            sleep 2
+          end
+        end
+      end
+    end
+  end
+end
+
+loop do
+
+  log_raw "#{composition}: Loop start\n"
+  activity = JSON.parse(File.read(file)) # rescue {}
+  log_raw "#{composition}: #{activity}\n"
+
+  activity.each do |branch, question_type|
+    log_raw "#{branch} #{question_type}\n"
+    activity[branch].each do |type, minutes|
+      type = type.to_i
+      case
+      when type == 1
+      then play_in_a_thread do
+             ones(minutes.first)
+           end
+      when type == 2
+      then play_in_a_thread do
+             twos(minutes.first)
+           end
+      when type == 3
+      then play_in_a_thread do
+             threes(minutes.first)
+           end
+      when type == 4
+      then play_in_a_thread do
+             fours(minutes.first)
+           end
+      when type == 5
+      then play_in_a_thread do
+             fives(minutes.first)
+           end
+      end
+    end
+  end
+
+  sleep minutes * bpm
+
+end

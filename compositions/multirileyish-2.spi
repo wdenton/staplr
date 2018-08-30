@@ -1,0 +1,98 @@
+# sonic_pi
+
+composition = "Multirileyish 2.0"
+
+# COMMENT:
+# Branch: ignored
+# Type: note length
+# Duration: duration of sound
+
+# Copyright William Denton <wtd@pobox.com> 2016
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+use_synth :growl
+
+minutes = 1
+
+file = ENV['HOME'] + "/music/staplr/staplr-branch-activity-01.json"
+
+bpm = 128
+use_bpm bpm
+
+# define :sum do |array|
+#   array.reduce 0, :+ # Nice way to sum array; default to 0 if no elements
+# end
+
+define :all_the do |activity, i|
+  # For 1..5, return an array of all of the times of those question types,
+  # regardless of branch.
+  activity.map { |h, k| k["#{i}"] }.flatten.compact
+end
+
+define :the_sound do |type, minutes|
+  # c = chord([0, :d2, :d3, :d3, :d4, :d5][type], 'm7+9')
+  c = chord([:d2, :d3, :d4, :d5].choose, [:m7, :m9, :m11, :m13].choose)
+  note_length = 2**(type - 3)
+  j = (2**(10 - type)) * minutes.to_i
+  log_raw "#{composition}: #{type}: Mins: #{minutes} Len: #{note_length} Rep: #{j} Chord #{c}\n"
+  n  = rrand_i(0, c.length)
+  pan_placement = rrand(-1, 1)
+  with_fx :echo, phase: note_length.to_f/2, decay: 1 do
+    j.times do
+      play c.ring[n], attack: note_length/2, decay: note_length/2, amp: 0.8, pan: pan_placement, mod_phase: 0.25
+      # n += [-2, -1, 1, 2].choose
+      n += [-2, -1, -1, 1, 1, 2].choose
+      sleep note_length
+    end
+  end
+end
+
+loop do
+
+  activity = JSON.parse(File.read(file))
+
+  log_raw "#{composition} Loop start\n"
+  log_raw "#{composition} #{activity}\n"
+
+  in_thread(name: :ones) do
+    ones = all_the(activity, 1)
+    ones.each do |one|
+      the_sound(1, one)
+    end
+  end
+
+  in_thread(name: :twos) do
+    twos = all_the(activity, 2)
+    twos.each do |two|
+      the_sound(2, two)
+    end
+  end
+
+  in_thread(name: :threes) do
+    threes = all_the(activity, 3)
+    threes.each do |three|
+      the_sound(3, three)
+    end
+  end
+
+  in_thread(name: :fours) do
+    fours = all_the(activity, 4)
+    fours.each do |four|
+      the_sound(4, four)
+    end
+  end
+
+  in_thread(name: :fives) do
+    fives = all_the(activity, 5)
+    fives.each do |five|
+      the_sound(5, five)
+    end
+  end
+
+  sleep minutes * bpm
+
+end

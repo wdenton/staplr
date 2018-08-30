@@ -1,0 +1,55 @@
+minutes = 5
+type = 2
+
+c = chord([:d3, :d4, :d5].choose, [:m7, :m9, :m11, :m13].choose)
+
+puts c
+
+d = []
+
+n = rrand_i(1, c.length)
+d << c.ring[n]
+n += [-2, -1, -1, 1, 1, 2].choose
+d << c.ring[n]
+n += [-2, -1, -1, 1, 1, 2].choose
+d << c.ring[n]
+n += [-2, -1, -1, 1, 1, 2].choose
+d << c.ring[n]
+
+progression = [:i, :iv, :vi, :iv]
+
+4.times do |j|
+  c = chord_degree(progression[j], [:d3, :d4, :d5].choose, [:major, :minor].choose)
+  puts c
+  n = rrand_i(1, c.length)
+  d = []
+  d << c.ring[n]
+  n += [-2, -1, -1, 1, 1, 2].choose
+  d << c.ring[n]
+  n += [-2, -1, -1, 1, 1, 2].choose
+  d << c.ring[n]
+  n += [-2, -1, -1, 1, 1, 2].choose
+  d << c.ring[n]
+  4.times do
+    4.times do |i|
+      3.times do |k|
+        play d[k]
+        sleep 1.0/6
+      end
+    end
+  end
+end
+
+
+
+#duration = 2**(type - 4)
+#j = (2**(10 - type))*minutes.to_i
+#puts "Type: #{type} Minutes: #{minutes} Duration: #{duration} Repeating #{j} Chord #{c}"
+#n  = rrand_i(0, c.length)
+#pan_placement = rrand(-1, 1)
+## with_fx :wobble, phase: duration do
+#j.times do
+#  play c.ring[n], attack: duration/4, sustain: duration/2, decay: duration/4, amp: 0.8, pan: pan_placement, mod_phase: 0.25
+#  n += [-2, -1, -1, 1, 1, 2].choose
+#  sleep duration
+#end

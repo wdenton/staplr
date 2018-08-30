@@ -1,0 +1,274 @@
+# sonic_pi
+
+# COMPOSITION: Glassian 1
+# COMMENT: A bit Philip Glassy, but not a lot.
+#
+# Branch: ignored
+# Type: different algorithm for each
+# Duration: duration of sound
+
+# Copyright William Denton <wtd@pobox.com> 2015
+
+use_debug false
+use_random_seed Time.now.to_i
+
+# TODO
+# How to stop clustering in the middle if one half-hour has
+# one 3, one 2 and one 1?
+
+use_synth :fm
+
+minutes = 30
+
+file = ENV['HOME'] + "/music/staplr/staplr-activity.txt"
+
+activity = Hash.new { |h,k| h[k] = Hash.new("") }
+
+define :sum do |array|
+  array.reduce 0, :+ # Nice way to sum array; default to 0 if no elements
+end
+
+loop do
+
+  File.open(file).each_line do |line|
+    question, times_csv = line.split("|")
+    activity[question.to_i]["times"] = times_csv.chomp.split(",").map { |x| x.to_i }  end
+
+  fitting = Hash.new { |h,k| h[k] =  []}
+  non_fitting = Hash.new { |h,k| h[k] = [] }
+
+  (1..5).to_a.each do |i|
+    fitting[i] = activity[i]["times"]
+    while sum(fitting[i]) > minutes
+      non_fitting[i] << fitting[i].delete_at(fitting[i].find_index(fitting[i].max))
+    end
+  end
+
+  bpm = 64
+  puts "BPM: #{bpm}"
+  use_bpm bpm
+
+  define :calculate_delay do |times|
+    delay = (minutes - sum(times)) / (times.size + 1.0) # Float to get decimals
+    delay = (delay * bpm).round
+    if delay < 1
+      delay = 0
+    end
+    return delay
+  end
+
+  # define :choose_notes do |chord, number|
+  #   n = rrand_i(1, chord.length)
+  #   result = []
+  #   number.times do
+  #     result << chord.ring[n]
+  #     n += [-2, -1, -1, 1, 1, 2].choose
+  #   end
+  #   return result
+  # end
+
+  # define :glassian do |type, minutes|
+  #   # c = chord([:d3, :d4, :d5].choose, [:m7, :m9, :m11, :m13].choose)
+  #   duration = 2**(type - 4)
+  #   progression = [:i, :iv, :vi, :iv]
+  #   puts "Type: #{type} Minutes: #{minutes} Duration: #{duration}"
+  #   pan_placement = rrand(-1, 1)
+  #   minutes.times do
+  #     c = chord([:d3, :d4, :d5].choose, [:m7, :m9, :m11, :m13].choose)
+  #     melody = choose_notes(c, 4)
+  #     4.times do |loop|
+  #       # d = chord_degree(progression[loop], c, [:major, :minor].choose)
+  #       4.times do |beat|
+  #         play melody[beat], attack: duration/4, sustain: duration/2, decay: duration/4, amp: 0.8, pan: pan_placement, mod_phase: 0.25
+  #         sleep duration
+  #       end
+  #     end
+  #   end
+  # end
+
+  # use_synth :fm
+
+  use_bpm 64
+
+  eighths = [0, 1, 2, 3, 4, 3, 2, 1]
+  fourths = [0, 1, 2, 1]
+  progression = [:i, :ii, :vi, :iv]
+
+  chord_choices = [:d3, :d4, :d5] #, :b3, :b4]
+
+  define :ones do |minutes|
+    use_synth :tri
+    pan_placement = rrand(-1, 1)
+    minutes.times do
+      c = chord_choices.choose
+      volume = rrand(0.4, 0.6)
+      4.times do |where|
+        d = chord_degree(progression[where], c, [:major, :minor].choose, 5)
+        4.times do
+          4.times do |bar|
+            8.times do |note|
+              play d[eighths[note]], amp: volume, pan: pan_placement
+              sleep 0.125
+            end
+          end
+        end
+      end
+    end
+  end
+
+  in_thread(name: :ones) do
+    delay = calculate_delay(fitting[1])
+    puts "Ones delay: #{delay}"
+    sleep delay
+    fitting[1].each do |t|
+      ones(t)
+      sleep delay
+    end
+  end
+
+  define :twos do |minutes|
+    pan_placement = rrand(-1, 1)
+    minutes.times do
+      c = chord_choices.choose
+      volume = rrand(0.4, 0.6)
+      4.times do |where|
+        d = chord_degree(progression[where], c, [:major, :minor].choose, 4)
+        4.times do
+          4.times do
+            4.times do |i|
+              play d[fourths[i]], amp: volume, pan: pan_placement
+              sleep 0.25
+            end
+          end
+        end
+      end
+    end
+  end
+
+  in_thread(name: :twos) do
+    delay = calculate_delay(fitting[2])
+    puts "Twos delay: #{delay}"
+    sleep delay
+    fitting[2].each do |t|
+      twos(t)
+      sleep delay
+    end
+  end
+
+  define :threes do |minutes|
+    use_synth :beep
+    pan_placement = rrand(-1, 1)
+    minutes.times do
+      c = chord_choices.choose
+      volume = rrand(0.4, 0.6)
+      use_synth_defaults amp: volume, sustain: 0.1, pan: pan_placement
+      4.times do |where|
+        d = chord_degree(progression[where], c, [:major, :minor].choose, 7)
+        4.times do
+          4.times do |bar|
+            1.times do |beat|
+              play d[eighths[bar]]
+              sleep 0.333
+              play d[eighths[bar + 1]]
+              sleep 0.333
+              play d[eighths[bar + 2]]
+              sleep 0.333
+            end
+          end
+        end
+      end
+    end
+  end
+
+  in_thread(name: :threes) do
+    use_synth :beep
+    delay = calculate_delay(fitting[3])
+    puts "Threes delay: #{delay}"
+    sleep delay
+    fitting[3].each do |t|
+      threes(t)
+      sleep delay
+    end
+  end
+
+  in_thread(name: :threes_over) do
+    non_fitting[3].each do |t|
+      threes(t)
+    end
+  end
+
+  define :fours do |minutes|
+    pan_placement = rrand(-1, 1)
+    minutes.times do
+      use_synth :fm
+      c = chord_choices.choose
+      volume = rrand(0.3, 0.5)
+      4.times do |where|
+        d = chord_degree(progression[where], c, [:major, :minor].choose, 4)
+        4.times do
+          4.times do |bar|
+            1.times do |note|
+              play d[fourths[bar]], amp: volume, sustain: 1, pan: pan_placement
+              sleep 1
+            end
+          end
+        end
+      end
+    end
+  end
+
+  in_thread(name: :fours) do
+    delay = calculate_delay(fitting[4])
+    puts "Fours delay: #{delay}"
+    sleep delay
+    fitting[4].each do |t|
+      fours(t)
+      sleep delay
+    end
+  end
+
+  in_thread(name: :fours_over) do
+    non_fitting[4].each do |t|
+      fours(t)
+    end
+  end
+
+  define :fives do |minutes|
+    pan_placement = rrand(-1, 1)
+    minutes.times do
+      use_synth :mod_fm
+      volume = rrand(0.3, 0.5)
+      with_fx :reverb, phase: 1 do
+        c = chord_choices.choose
+        4.times do |where|
+          d = chord_degree(progression[where], c, [:major, :minor].choose, 4)
+          4.times do |fourbar|
+            2.times do
+              play d[0], attack: 0.5, sustain: 1, decay: 1, amp: volume, pan: pan_placement
+              sleep 2
+            end
+          end
+        end
+      end
+    end
+  end
+
+  in_thread(name: :fives) do
+    delay = calculate_delay(fitting[5])
+    puts "Fives delay: #{delay}"
+    sleep delay
+    fitting[5].each do |t|
+      fives(t)
+      sleep delay
+    end
+  end
+
+  in_thread(name: :fives_over) do
+    non_fitting[5].each do |t|
+      fives(t)
+    end
+  end
+
+  sleep minutes * bpm
+
+end

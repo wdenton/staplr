@@ -11,7 +11,7 @@ if [ "$#" -ne 1 ]; then
 fi
 COMPOSITION=$1
 
-cd ~/staplr/ || exit
+cd ~/src/staplr/ || exit
 
 # Is kernel module snd_aloop enabled?
 lsmod | grep -q snd_aloop

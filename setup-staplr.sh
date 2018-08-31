@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Set up and configure everything necessary for
-# Sonic Pi to run headless (on wdenton.uit.yorku.ca)
+##
+## STAPLR setup
+##
+
+# Set up and configure everything necessary for Sonic Pi to run
+# headless, play a composition from a script, and stream the output
+# to DarkIce so it can be broadast.
 
 # The script takes one argument: the name of the composition to be used
 
@@ -19,13 +24,18 @@ cd ~/src/staplr/ || exit
 
 # This needs to be enabled.  Once that's done, it won't go away,
 # but it needs to be checked.
-
 if ! lsmod | grep -q snd_aloop
 then
     echo "snd_aloop module not enabled ... enabling"
     sudo modprobe snd-aloop
 fi
 
+##
+## tmux
+##
+
+# The whole thing depends on tmux.  Start a server if one isn't
+# already running.
 tmux start-server
 
 # If a STAPLR tmux session is already running, then we want to kill
@@ -37,13 +47,19 @@ tmux start-server
 # $ tmux attach -t staplr
 # and kill everything by hand.
 
-# if [ "$?" -eq 0 ] ; then
+# By the way, I don't know why a ! isn't needed in this if, since it
+# returns 0 if the session exists. This reads cleanly, but it doesn't
+# seem to work the Unix way.
+#
+# I used to have this:
+#
 # tmux has-session -t staplr 2>/dev/null
+# if [ "$?" -eq 0 ] ; then
+#
+# But shellcheck didn't like that.
+
 if tmux has-session -t staplr
 then
-    # By the way, I don't know why a ! isn't needed there, since it
-    # returns 0 if the session exists.  This reads cleanly, but
-    # it doesn't seem to work the Unix way.
     echo "Session staplr exists; killing it ..."
     tmux send-keys -t staplr:4 "C-c"
     tmux kill-window -t staplr:4
@@ -84,8 +100,7 @@ sleep 2
 ##
 
 echo "Sonic Pi ... (then sleeping)"
-tmux new-window -t staplr:3 -n "sonicpi"
-# tmux send-keys -t staplr:3 "xvfb-run /usr/local/src/sonic-pi-2.6.0/bin/sonic-pi" "C-m"
+tmux new-window -t staplr:3 -n "sonic-pi"
 tmux send-keys -t staplr:3 "xvfb-run sonic-pi" "C-m"
 sleep 10
 

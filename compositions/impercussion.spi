@@ -20,7 +20,7 @@ file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
 
 # How often the data file refreshes, and so how often
 # the main loop loops.
-minutes = 10
+minutes = 1
 
 # 128 BPM is a nice tempo and also a convenient power of 2.
 bpm = 128

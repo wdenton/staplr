@@ -16,7 +16,8 @@ use_random_seed Time.now.to_i
 
 use_synth :chipbass  #:dsaw, :growl
 
-file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
+# file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
+file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
 
 # How often the data file refreshes, and so how often
 # the main loop loops.
@@ -68,7 +69,7 @@ define :the_threes do |minutes|
   toms = [:drum_tom_mid_soft, :drum_tom_mid_hard,
           :drum_tom_lo_soft, :drum_tom_lo_hard,
           :drum_tom_hi_hard, :drum_tom_hi_soft
-          ]
+         ]
   with_fx :reverb, room: 0.3 do
     minutes.times do
       note_length = [1, 2, 4].choose
@@ -87,53 +88,53 @@ define :the_fours do |minutes|
   random_four_synth = [:bass_hard_c, :bass_woodsy_c, :bass_voxy_c].choose
   with_fx :reverb do
     minutes.times do
-      bpm/4.times do
-        sample random_four_synth, pan: 0.5, amp: 0.5
-        sleep 4
-      end
-    end
-  end
-end
+       bpm/4.times do
+         sample random_four_synth, pan: 0.5, amp: 0.5
+         sleep 4
+       end
+     end
+   end
+ end
 
-define :the_fives do |minutes|
-  # Four to the floor bass frum
-  with_fx :bitcrusher do
-    minutes.times do
-      bpm.times do
-        sample :bd_tek
-        sleep 1
-      end
-    end
-  end
-end
+ define :the_fives do |minutes|
+   # Four to the floor bass frum
+   with_fx :bitcrusher do
+     minutes.times do
+       bpm.times do
+         sample :bd_tek
+         sleep 1
+       end
+     end
+   end
+ end
 
 
-loop do
-  
-  activity = JSON.parse(File.read(file))
-  
-  log_raw "#{composition}: #{activity}\n"
-  
-  all_the(activity, 1).each do |one|
-    play_in_a_thread do the_ones(one) end
-  end
-  
-  all_the(activity, 2).each do |two|
-    play_in_a_thread do the_twos(two) end
-  end
-  
-  all_the(activity, 3).each do |three|
-    play_in_a_thread do the_threes(three) end
-  end
-  
-  all_the(activity, 4).each do |four|
-    play_in_a_thread do the_fours(four) end
-  end
-  
-  all_the(activity, 5).each do |five|
-    play_in_a_thread do the_fives(five) end
-  end
-  
-  sleep minutes * bpm
-  
-end
+ loop do
+
+   activity = JSON.parse(File.read(file))
+
+   log_raw "#{composition}: #{activity}\n"
+
+   all_the(activity, 1).each do |one|
+     play_in_a_thread do the_ones(one) end
+   end
+
+   all_the(activity, 2).each do |two|
+     play_in_a_thread do the_twos(two) end
+   end
+
+   all_the(activity, 3).each do |three|
+     play_in_a_thread do the_threes(three) end
+   end
+
+   all_the(activity, 4).each do |four|
+     play_in_a_thread do the_fours(four) end
+   end
+
+   all_the(activity, 5).each do |five|
+     play_in_a_thread do the_fives(five) end
+   end
+
+   sleep minutes * bpm
+
+ end

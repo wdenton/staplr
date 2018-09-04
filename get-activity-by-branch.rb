@@ -18,27 +18,13 @@ doc = <<DOCOPT
 
   Options:
     --minutes <min>   Get data for most recent time span [default: 30]
+    --askus           Include AskUs? [default: false]
+    --building        Include Building Services? [default: false]
     --circ            Include circulation desks? [default: false]
     --verbose         Be verbose [default: false]
 DOCOPT
 
 options = Docopt.docopt(doc)
-
-# options = {}
-# options[:minutes] = 30
-# options[:circ] = false
-# OptionParser.new do |opts|
-#   opts.banner = "Usage: get-activity-by-branch.rb [options]"
-#   opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-#     options[:verbose] = v
-#   end
-#   opts.on("-m", "--minutes m", "Minutes to capture") do |m|
-#     options[:minutes] = m.to_i
-#   end
-#   opts.on("c", "--circ", "Include circulation desks") do
-#     options[:circ] = TRUE
-#   end
-# end.parse!
 
 data_url = "https://www.library.yorku.ca/libstats/reportReturn.do?&library_id=&location_id=&report_id=DataCSVReport"
 
@@ -104,11 +90,14 @@ if data == "\n"
 else
   csv = CSV.parse(data, headers: true, header_converters: :symbol)
 
-  # Silently drop activity at the Scott info desk, which is too busy
-  # and would overwhelm Twitter.
-  csv.delete_if { |row| row[:library_name] == "Scott Information" }
+  unless options["--askus"]
+    csv.delete_if { |row| row[:library_name] == "AskUs" }
+  end
 
-  # Only include circ desks if the --circ option is true
+  unless options["--building"]
+    csv.delete_if { |row| row[:library_name] == "BuildingServices" }
+  end
+
   unless options["--circ"]
     csv.delete_if { |row| row[:location_name] == "Circulation Desk" }
   end

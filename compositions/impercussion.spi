@@ -39,7 +39,7 @@ end
 
 define :the_zeros do |minutes|
   # Just the one sound, no repetition, for a referral.
-  sample [:elec_filt_snare, :bass_hit_c, :bass_voxy_hit_c].choose
+  sample [:elec_filt_snare, :bass_thick_c, :bass_voxy_c, :bass_woodsy_c].choose
 end
 
 define :the_ones do |minutes|

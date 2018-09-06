@@ -1,6 +1,6 @@
 # STAPLR percussion sounds
 
-composition = "Impercussion 0.7"
+composition = "Impercussion 0.8"
 
 # COMMENT:
 # Branch: ignored (but in future, maybe: except Bronfman is delayed a half-beat)
@@ -39,7 +39,7 @@ end
 
 define :the_zeros do |minutes|
   # Just the one sound, no repetition, for a referral.
-  sample [:elec_filt_snare, :bass_thick_c, :bass_voxy_c, :bass_woodsy_c].choose
+  sample :elec_filt_snare
 end
 
 define :the_ones do |minutes|
@@ -64,9 +64,11 @@ define :the_twos do |minutes|
     minutes.times do
       note_length = [2, 3, 4].choose
       bpm.times do
-        note_length.times do
-          sample snares.choose, amp: [0.5, 0.6, 0.7, 0.8].choose, pan: rrand(-0.8, 0.8) if rand_i() == 1
-          sleep 1.0/note_length
+        with_fx [:distortion, :flanger, :bitcrusher].choose do
+          note_length.times do
+            sample snares.choose, amp: [0.5, 0.6, 0.7, 0.8].choose, pan: rrand(-0.8, 0.8) if one_in 2
+            sleep 1.0/note_length
+          end
         end
       end
     end
@@ -84,7 +86,7 @@ define :the_threes do |minutes|
       note_length = [1, 2, 4].choose
       bpm.times do
         note_length.times do
-          sample toms.choose, amp: [0.4, 0.6, 0.8].choose, pan: rrand(-1, 1) if rand_i() == 1
+          sample toms.choose, amp: [0.4, 0.6, 0.8].choose, pan: rrand(-1, 1) if one_in 2
           sleep 1.0/note_length
         end
       end

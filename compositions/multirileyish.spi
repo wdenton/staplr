@@ -1,26 +1,30 @@
-# sonic_pi
+# STAPLR in a Terry Riley style, sort of
 
-composition = "Multirileyish 3.2"
+composition = "Multirileyish 4.0"
 
 # COMMENT:
 # Branch: ignored
 # Type: note length
 # Duration: duration of sound
 
-# Copyright William Denton <wtd@pobox.com> 2016
+# Copyright William Denton <wtd@pobox.com> 2018
 
 require 'json'
 
 use_debug false
 use_random_seed Time.now.to_i
 
-use_synth :dsaw
+# Good synths: :beep, :hoover, :chipbass, :dsaw, :growl
+# Or just :piano
+use_synth :piano
 
 minutes = 1
 
-file = ENV['HOME'] + "/music/staplr/staplr-branch-activity-01.json"
+# file = ENV['HOME'] + "/src/staplr/test-durations/test.json"
+file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
 
-bpm = 128
+bpm = 32
+bpm = bpm * 1.0
 use_bpm bpm
 
 define :play_in_a_thread do |&block|
@@ -36,19 +40,22 @@ define :all_the do |activity, i|
 end
 
 define :the_sound do |type, minutes|
-  # c = chord([0, :d2, :d3, :d3, :d4, :d5][type], 'm7+9')
-  c = chord([:d2, :d3, :d4, :d5, :d6].choose, [:m7, :m9, :m11, :m13].choose)
+  c = chord([:c2, :c3, :c4, :c5].choose , :m11) #[:m7, :m9, :m11, :m13].choose
   note_length = 2**(type - 4)
-  j = (2**(11 - type)) * minutes.to_i
+  j = minutes.to_i * bpm / note_length
   log_raw "#{composition}: #{type}: Mins: #{minutes} Len: #{note_length} Rep: #{j} Chord #{c}\n"
   n  = rrand_i(0, c.length)
   pan_placement = rrand(-1, 1)
-  with_fx :wobble, mix: 0.8, phase: note_length.to_f/2, smooth: 1, wave: 2 do
+  with_fx :reverb, room: 0.7 do
     j.times do
-      play c.ring[n], attack: note_length/2, decay: note_length/2, pan: pan_placement, mod_phase: 0.25
-      # n += [-2, -1, 1, 2].choose
-      n += [-2, -1, -1, 1, 1, 2].choose
-      sleep note_length
+      # For a synth, there are more effects that can be used:
+      # play c.ring[n], attack: note_length/2, decay: note_length/2, pan: pan_placement, mod_phase: 0.25
+      # But for a piano, just play it plain:
+      delay = [0, 0, 0.01, 0.01, 0.02, 0.03].choose
+      sleep delay
+      play c.ring[n], amp: rrand(0.7, 0.95), pan: pan_placement unless one_in 8
+      n += [-2, -1, -1, 0, 1, 1, 2].choose
+      sleep note_length - delay
     end
   end
 end
@@ -57,8 +64,7 @@ loop do
 
   activity = JSON.parse(File.read(file))
 
-  log_raw "#{composition} Loop start\n"
-  log_raw "#{composition} #{activity}\n"
+  log_raw "#{composition}: #{activity}\n"
 
   all_the(activity, 1).each do |one|
     play_in_a_thread do the_sound(1, one) end

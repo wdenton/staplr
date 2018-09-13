@@ -1,0 +1,72 @@
+# Pulsar is a heartbeat, where the pulse gets faster the more that's happening
+
+composition = "Pulsar 1.0"
+
+# COMMENT:
+# Branch: ignored
+# Type: ignored
+# Duration: each minute contributes to the intensity of the pulse
+
+# Copyright William Denton <wtd@pobox.com> 2018
+
+require "json"
+
+use_debug false
+
+minutes = 1
+
+file = ENV["HOME"] + "/src/staplr/staplr-branch-activity-01.json"
+
+def flatten(activity)
+  # Flatten the activity hash into an array of durations.
+  flattened = []
+  activity.each do |location|
+    location[1].each_value do |k|
+      flattened << k
+    end
+  end
+  flattened.flatten
+end
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :heartbeat do |i|
+  bpm = 30 + 25 * i
+  use_bpm bpm
+  bpm.times do
+    sample :drum_bass_hard
+    sleep 0.3
+    sample :drum_bass_hard, amp: 0.3, decay: 0.2
+    sleep 0.7
+  end
+end
+
+counter = 0
+
+# This hash will build up over time.  Each key represents a minute
+# and each value is how many things were happening during that minute.
+intensity = Hash.new(0)
+
+loop do
+  activity = JSON.parse(File.read(file))
+  durations = flatten(activity)
+
+  durations.each do |d|
+    d.times do |n|
+      intensity[counter + n] += 1
+    end
+  end
+
+  log_raw "#{composition}: Counter #{counter}; Durations #{durations}; Intensity #{intensity[counter]}\n"
+
+  play_in_a_thread do
+    heartbeat(intensity[counter])
+  end
+
+  counter += 1
+  sleep minutes * 60
+end

@@ -29,10 +29,20 @@ pitches = [nil, 0, 7, 12, 16, 19]
 activity = Hash.new
 
 branch_settings = {
+  "AskUs" => {
+    "starting_note" => :C2,
+    "synth" => :prophet,
+    "pan" => -0.25
+  },
   "Bronfman" => {
     "starting_note" => :C3,
     "synth" => :growl,
     "pan" => -0.75
+  },
+  "BuildingServices" => {
+    "starting_note" => :C3,
+    "synth" => :blade,
+    "pan" => -0.6
   },
   "Frost" => {
     "starting_note" => :C3,
@@ -91,8 +101,16 @@ loop do
   activity = JSON.parse(File.read(file))
   log_raw "#{composition}: #{activity}\n"
 
+  in_thread(name: :askus) do
+    play_branch ("AskUs")
+  end
+
   in_thread(name: :bronfman) do
     play_branch ("Bronfman")
+  end
+
+  in_thread(name: :buildingservices) do
+    play_branch ("BuildingServices")
   end
 
   in_thread(name: :frost) do
@@ -101,8 +119,6 @@ loop do
 
   in_thread(name: :scott) do
     play_branch("Scott")
-    play_branch("BuildingServices")
-    play_branch("AskUs")
   end
 
   in_thread(name: :steacie) do

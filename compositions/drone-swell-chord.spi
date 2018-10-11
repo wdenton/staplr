@@ -49,6 +49,11 @@ branch_settings = {
     "synth" => :fm,
     "pan" => -0.5
   },
+  "Osgoode" => {
+    "starting_note" => :C5,
+    "synth" => :sine,
+    "pan" => 0.6
+  },
   "Scott" => {
     "starting_note" => :C3,
     "synth" => :mod_fm,
@@ -73,7 +78,7 @@ branch_settings = {
 
 define :play_branch do |branch|
   if activity[branch]
-    log_raw "#{composition}: Playing #{branch}\n"
+    ## log_raw "#{composition}: Playing #{branch}\n"
     activity[branch].each do |question_type, minutes|
       minutes.each do |m|
         play_branch_note(branch, question_type.to_i, m.to_i)
@@ -96,8 +101,6 @@ end
 
 loop do
 
-  log_raw "#{composition}: Loop start\n"
-
   activity = JSON.parse(File.read(file))
   log_raw "#{composition}: #{activity}\n"
 
@@ -115,6 +118,10 @@ loop do
 
   in_thread(name: :frost) do
     play_branch("Frost")
+  end
+
+  in_thread(name: :osgoode) do
+    play_branch("Osgoode")
   end
 
   in_thread(name: :scott) do

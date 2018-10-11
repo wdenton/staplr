@@ -1,13 +1,13 @@
 # sonic_pi
 
-composition = "Drone Swell Chord 1.1"
+composition = "Drone Swell Chord 2.0"
 
 # COMMENT: Build up a huge massive chord using different synths for different branches
 # Branch: synth
 # Type: note
 # Duration: duration of sound
 
-# Copyright William Denton <wtd@pobox.com> 2015
+# Copyright William Denton <wtd@pobox.com> 2015--2018
 
 require 'json'
 
@@ -18,6 +18,7 @@ use_synth :fm
 
 minutes = 1
 
+# file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
 file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
 
 bpm = 60
@@ -31,7 +32,7 @@ branch_settings = {
   "Bronfman" => {
     "starting_note" => :C3,
     "synth" => :growl,
-    "pan" => -0.8
+    "pan" => -0.75
   },
   "Frost" => {
     "starting_note" => :C3,
@@ -49,14 +50,14 @@ branch_settings = {
     "pan" => 0.5
   },
   "ASC" => {
-    "starting_note" => :c2,
+    "starting_note" => :C2,
     "synth" => :subpulse,
-    "pan" => 0.8
+    "pan" => 0.75
   },
   "SMIL" => {
     "starting_note" => :c2,
     "synth" => :subpulse,
-    "pan" => 0.8
+    "pan" => 0.75
   }
 }
 
@@ -73,14 +74,14 @@ end
 
 define :play_branch_note do |branch, question_type, minutes|
   use_synth branch_settings[branch]["synth"]
-  puts "#{branch} Mins #{minutes} Type #{question_type}"
+  ## puts "#{branch} Mins #{minutes} Type #{question_type}"
   log_raw "#{composition}: #{branch} Mins #{minutes} Type #{question_type}\n"
   play (branch_settings[branch]["starting_note"] + pitches[question_type]),
        amp: rrand(0.4, 0.7),
        attack: bpm * minutes.to_f/4,
        sustain: bpm * minutes.to_f/2,
        release: bpm * minutes.to_f/4,
-       pan: branch_settings[branch]["pan"]
+       pan: branch_settings[branch]["pan"] + rrand(-0.25, 0.25)
 end
 
 loop do
@@ -100,6 +101,8 @@ loop do
 
   in_thread(name: :scott) do
     play_branch("Scott")
+    play_branch("BuildingServices")
+    play_branch("AskUs")
   end
 
   in_thread(name: :steacie) do

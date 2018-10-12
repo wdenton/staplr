@@ -18,3 +18,4 @@
 + Silences from the desk in question, or just ambient sound from that library
 + Move through the circle of fifths, or some other progression
 + Tick per minute as a basis to really keep things locked.
++ Satie's "Vexations;" every minute of activity is another minute played

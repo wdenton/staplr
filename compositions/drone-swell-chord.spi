@@ -1,6 +1,6 @@
 # sonic_pi
 
-composition = "Drone Swell Chord 2.0"
+composition = "Drone Swell Chord 2.1"
 
 # COMMENT: Build up a huge massive chord using different synths for different branches
 # Branch: synth
@@ -91,12 +91,14 @@ define :play_branch_note do |branch, question_type, minutes|
   use_synth branch_settings[branch]["synth"]
   ## puts "#{branch} Mins #{minutes} Type #{question_type}"
   log_raw "#{composition}: #{branch} Mins #{minutes} Type #{question_type}\n"
-  play (branch_settings[branch]["starting_note"] + pitches[question_type]),
-       amp: rrand(0.4, 0.7),
-       attack: bpm * minutes.to_f/4,
-       sustain: bpm * minutes.to_f/2,
-       release: bpm * minutes.to_f/4,
-       pan: branch_settings[branch]["pan"] + rrand(-0.25, 0.25)
+  with_fx :reverb do
+    play (branch_settings[branch]["starting_note"] + pitches[question_type]),
+         amp: rrand(0.4, 0.7),
+         attack: bpm * minutes.to_f/4,
+         sustain: bpm * minutes.to_f/2,
+         release: bpm * minutes.to_f/4,
+         pan: branch_settings[branch]["pan"] + rrand(-0.25, 0.25)
+  end
 end
 
 loop do

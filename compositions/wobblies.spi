@@ -1,0 +1,81 @@
+# Wobble Wobble
+
+composition = "The Wobblies 1.0"
+
+# COMMENT:
+# Branch: ignored
+# Type: ignored
+# Duration: duration of sound
+
+# Copyright William Denton <wtd@pobox.com> 2018
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+minutes = 1
+
+# file = ENV['HOME'] + "/src/staplr/test-durations/test.json"
+file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+
+bpm = 30
+bpm = bpm * 1.0
+use_bpm bpm
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :all_the do |activity, i|
+  # For 1..5, return an array of all of the times of those question types,
+  # regardless of branch.
+  activity.map { |h, k| k["#{i}"] }.flatten.compact
+end
+
+define :the_wobble do |type, minutes|
+  with_synth [:mod_fm, :mod_dsaw, :mod_pulse].choose do
+    # Could use with_bpm to adjust the BPM, maybe by question type?
+    with_fx :reverb, room: 0.4 do
+      with_fx :octaver do
+        play choose(chord([:E2, :E3, :E4, :E5].choose, 'm13')), amp: rrand(0.4, 0.7),
+             attack: bpm * minutes.to_f/4,
+             sustain: bpm * minutes.to_f/2,
+             release: bpm * minutes.to_f/4,
+             pan: rrand(-0.9, 0.9)
+      end
+    end
+  end
+end
+
+loop do
+
+  activity = JSON.parse(File.read(file))
+
+  log_raw "#{composition}: #{activity}\n"
+
+  all_the(activity, 1).each do |one|
+    play_in_a_thread do the_wobble(1, one) end
+  end
+
+  all_the(activity, 2).each do |two|
+    play_in_a_thread do the_wobble(2, two) end
+  end
+
+  all_the(activity, 3).each do |three|
+    play_in_a_thread do the_wobble(3, three) end
+  end
+
+  all_the(activity, 4).each do |four|
+    play_in_a_thread do the_wobble(4, four) end
+  end
+
+  all_the(activity, 5).each do |five|
+    play_in_a_thread do the_wobble(5, five) end
+  end
+
+  sleep minutes * bpm
+
+end

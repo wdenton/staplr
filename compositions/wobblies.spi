@@ -37,14 +37,16 @@ end
 
 define :the_wobble do |type, minutes|
   with_synth [:mod_fm, :mod_dsaw, :mod_pulse].choose do
-    # Could use with_bpm to adjust the BPM, maybe by question type?
-    with_fx :reverb, room: 0.4 do
-      with_fx :octaver do
-        play choose(chord([:E2, :E3, :E4, :E5].choose, 'm13')), amp: rrand(0.4, 0.7),
-             attack: bpm * minutes.to_f/4,
-             sustain: bpm * minutes.to_f/2,
-             release: bpm * minutes.to_f/4,
-             pan: rrand(-0.9, 0.9)
+    this_bpm = [30, 60, 90].choose
+    with_bpm this_bpm do
+      with_fx :reverb, room: 0.4 do
+        with_fx :octaver do
+          play choose(chord([:E2, :E3, :E4, :E5].choose, 'm13')), amp: rrand(0.4, 0.7),
+               attack: this_bpm * minutes.to_f/4,
+               sustain: this_bpm * minutes.to_f/2,
+               release: this_bpm * minutes.to_f/4,
+               pan: rrand(-0.9, 0.9)
+        end
       end
     end
   end

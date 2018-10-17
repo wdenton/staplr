@@ -59,23 +59,33 @@ loop do
   log_raw "#{composition}: #{activity}\n"
 
   all_the(activity, 1).each do |one|
-    play_in_a_thread do the_wobble(1, one) end
+    play_in_a_thread do
+      the_wobble(1, one)
+    end
   end
 
   all_the(activity, 2).each do |two|
-    play_in_a_thread do the_wobble(2, two) end
+    play_in_a_thread do
+      the_wobble(2, two)
+    end
   end
 
   all_the(activity, 3).each do |three|
-    play_in_a_thread do the_wobble(3, three) end
+    play_in_a_thread do
+      the_wobble(3, three)
+    end
   end
 
   all_the(activity, 4).each do |four|
-    play_in_a_thread do the_wobble(4, four) end
+    play_in_a_thread do
+      the_wobble(4, four)
+    end
   end
 
   all_the(activity, 5).each do |five|
-    play_in_a_thread do the_wobble(5, five) end
+    play_in_a_thread do
+      the_wobble(5, five)
+    end
   end
 
   sleep minutes * bpm

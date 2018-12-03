@@ -1,6 +1,6 @@
 # STAPLR percussion sounds
 
-composition = "Impercussion 0.8"
+composition = "Impercussion 1.0"
 
 # COMMENT:
 # Branch: ignored (but in future, maybe: except Bronfman is delayed a half-beat)
@@ -44,7 +44,7 @@ end
 
 define :the_ones do |minutes|
   minutes.times do
-    note_length = [1, 2, 2, 3, 4, 4].choose
+    note_length = [0.5, 1, 2, 2].choose
     with_fx :panslicer do
       bpm.times do
         note_length.times do

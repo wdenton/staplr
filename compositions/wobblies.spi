@@ -1,6 +1,6 @@
 # Wobble Wobble
 
-composition = "The Wobblies 1.2"
+composition = "The Wobblies 1.3"
 
 # COMMENT:
 # Branch: ignored
@@ -41,7 +41,7 @@ define :the_wobble do |type, minutes|
     with_bpm this_bpm do
       with_fx :reverb, room: 0.4 do # Is this the naughty one?
         # with_fx :octaver do # Or this one?
-        play choose(chord([:E2, :E3, :E4].choose, 'm13')), amp: rrand(0.4, 0.7),
+        play choose(chord([:F2, :F3, :F4].choose, :dom7)), amp: rrand(0.4, 0.7),
              attack: this_bpm * minutes.to_f/4,
              sustain: this_bpm * minutes.to_f/2,
              release: this_bpm * minutes.to_f/4,

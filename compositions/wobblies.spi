@@ -1,7 +1,7 @@
 # coding: utf-8
 # Wobble Wobble
 
-composition = "The Wobblies 1.4"
+composition = "The Wobblies 1.5"
 
 # COMMENT:
 # Branch: ignored
@@ -36,13 +36,17 @@ define :all_the do |activity, i|
   activity.map { |h, k| k["#{i}"] }.flatten.compact
 end
 
+# mod_pulse is cool when it interferes with itself
+
+# mod_dsaw is very cool on its own
+
 define :the_wobble do |type, minutes|
   with_synth [:mod_dsaw, :mod_pulse].choose do # mod_fm, mod_dsaw, mod_pulse
-    this_bpm = [15, 30, 60, 90, 120].choose
+    this_bpm = [60, 75, 90, 105, 120].choose
     with_bpm this_bpm do
       with_fx :reverb, room: 0.4 do # Is this the naughty one?
         # with_fx :octaver do # Or this one?
-        play choose(chord([:F2, :F3, :F4].choose, :dom7)), amp: rrand(0.5, 0.7),
+        play choose(chord([:F2, :F3].choose, :dom7)), amp: rrand(0.5, 0.7),
              attack: this_bpm * minutes.to_f/4,
              sustain: this_bpm * minutes.to_f/2,
              release: this_bpm * minutes.to_f/4,

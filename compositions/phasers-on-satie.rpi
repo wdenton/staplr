@@ -1,0 +1,113 @@
+# Phasers on Satie
+# Taking the Vexations line and phasing it
+
+composition = "Phasers on Satie 0.8"
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+refresh_minutes = 1
+
+# file = ENV['HOME'] + "/src/staplr/test-durations/test.json"
+file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+
+use_synth :piano
+
+notes = 18
+bpm = 54.0
+
+use_bpm bpm
+
+bass_line = [:C2, :A2, :Cs2, :Bb2, :Ds2,
+             :G2, :D2, :C2, :Ds2, :Gb2, :Cs2,
+             :F2, :B2, :Gb2, :Ds2, :B2, :E2, :E2]
+
+define :all_the do |activity, i|
+  # For 1..5, return an array of all of the times of those question types,
+  # regardless of branch.
+  activity.map { |h, k| k["#{i}"] }.flatten.compact
+end
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :the_bass_line do |placement|
+  with_fx :reverb, room: 0.3 do
+    bass_line.each do |note|
+      play note, pan: placement
+      sleep 1
+    end
+  end
+end
+
+define :the_phase do |minutes|
+  reps = minutes * ( bpm / notes) + 1
+
+  puts "Reps = #{reps}"
+
+  phase_delay = notes / minutes / bpm
+  puts "Phase delay = #{phase_delay}"
+
+  pan = rrand(0.2, 0.6)
+
+  play_in_a_thread do
+    # Home riff
+    left_pan = rrand(0.1, 0.4)
+    reps.times do
+      the_bass_line(-0.2 - pan)
+    end
+  end
+
+  play_in_a_thread do
+    # Phased riff
+    reps.times do
+      the_bass_line(0.2 + pan)
+      sleep phase_delay
+    end
+  end
+end
+
+loop do
+
+  activity = JSON.parse(File.read(file))
+
+  log_raw "#{composition}: #{activity}\n"
+
+  all_the(activity, 1).each do |one|
+    play_in_a_thread do
+      the_phase(1)
+    end
+  end
+
+  all_the(activity, 2).each do |two|
+    play_in_a_thread do
+      the_phase(2)
+    end
+  end
+
+  all_the(activity, 3).each do |three|
+    play_in_a_thread do
+      the_phase(3)
+    end
+  end
+
+  all_the(activity, 4).each do |four|
+    play_in_a_thread do
+      the_phase(4)
+    end
+  end
+
+  all_the(activity, 5).each do |five|
+    play_in_a_thread do
+      the_phase(5)
+    end
+  end
+
+  sleep refresh_minutes * bpm
+
+end

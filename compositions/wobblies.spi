@@ -8,7 +8,7 @@ composition = "The Wobblies 1.5"
 # Type: ignored
 # Duration: duration of sound
 
-# Copyright William Denton <wtd@pobox.com> 2018 Mon numéro de téléphone est
+# Copyright William Denton <wtd@pobox.com> 2019
 
 require 'json'
 

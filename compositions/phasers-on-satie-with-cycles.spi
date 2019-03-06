@@ -1,0 +1,126 @@
+# Phasers on Satie (with Cycles)
+# Taking the Vexations line and phasing it
+
+composition = "Phasers on Satie (with Cycles) 1.0"
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+refresh_minutes = 1
+
+# file = ENV['HOME'] + "/src/staplr/test-durations/test.json"
+file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+
+use_synth :piano
+
+# bpm = 54 # Use 54 or 108 when it's 18 notes
+bpm = 240 # For 4 or 6 notes
+bpm = bpm.to_f # Need this for division to work.
+use_bpm bpm
+
+satie_riff = [:C2, :A2, :Cs2, :Bb2, :Ds2, :G2, :D2, :C2,
+              :Ds2, :Gb2, :Cs2, :F2, :B2, :Gb2, :Ds2, :B2, :E2, :E2]
+
+bass_line = satie_riff.take(8)
+
+num_notes = bass_line.length
+
+define :all_the_minutes do |activity|
+  all_the_minutes = []
+  unless activity.nil?
+    activity.each do |branch, types|
+      unless types.nil?
+        types.each do |type, minutes|
+          all_the_minutes << minutes
+        end
+      end
+    end
+  end
+  all_the_minutes.flatten!
+end
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :the_bass_line do |starting_point, notes_to_take, placement, reverb|
+  # puts "Bass line starting at: #{starting_point}"
+  with_fx :reverb, room: reverb do
+    bass_line.rotate(starting_point).take(notes_to_take).each do |note|
+      play note, pan: placement
+      sleep 1
+    end
+  end
+end
+
+define :the_phase do |minutes|
+  # reps = minutes * ( bpm / num_notes) + 1
+  # puts "Minutes = #{minutes}, Reps = #{reps}"
+
+  cycles_per_minute = (bpm/num_notes).to_i
+
+  # phase_delay = num_notes / minutes / bpm
+  phase_delay = num_notes / bpm
+  # puts "Phase delay = #{phase_delay}"
+
+  pan = rrand(0.0, 0.6)
+  reverb = rrand(0.2, 0.6)
+
+  play_in_a_thread do
+    # Home riff
+    minutes.times do |min|
+      cycles_per_minute.times do
+        the_bass_line(min.modulo(num_notes), num_notes, -0.2 - pan, reverb)
+      end
+    end
+  end
+
+  #  play_in_a_thread do
+  #    # Phased riff
+  #    reps.times do
+  #      the_bass_line(0.2 + pan, reverb)
+  #      sleep phase_delay
+  #    end
+  #  end
+
+  play_in_a_thread do
+    # Shifted riff, moving one note along each time
+    # puts "Shifted phase: #{minutes} minutes"
+    minutes.times do |min|
+      # Note: this starts at 0.
+      # puts "Min: #{min}, Modulo = #{min.modulo(num_notes)}"
+      (cycles_per_minute - 1).times do |rep|
+        # puts "Repetition #{rep}"
+        the_bass_line(min.modulo(num_notes), num_notes, 0.2 + pan, reverb)
+        sleep phase_delay
+      end
+      # The last cycle we don't want to play the final note,
+      # because we've caught up in the phase and are now
+      # one beat later and don't want the extra note hanging
+      # off the end.
+      1.times do
+        # puts "Repetition: final"
+        the_bass_line(min.modulo(num_notes), num_notes - 1, 0.2 + pan, reverb)
+        sleep phase_delay
+      end
+    end
+  end
+
+end
+
+loop do
+  activity = JSON.parse(File.read(file))
+  log_raw "#{composition}: #{activity}\n"
+  unless activity.size == 0
+    all_the_minutes(activity).each do |minutes|
+      play_in_a_thread do
+        the_phase(minutes)
+      end
+    end
+  end
+  sleep refresh_minutes * bpm
+end

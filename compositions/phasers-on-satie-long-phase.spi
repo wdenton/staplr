@@ -1,0 +1,112 @@
+# Phasers on Satie (Long Phase)
+# Taking the Vexations line and phasing it
+
+composition = "Phasers on Satie (Long Phase) 1.0"
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+refresh_minutes = 1
+
+# file = ENV['HOME'] + "/src/staplr/test-durations/test.json"
+file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+
+use_synth :piano
+
+bpm = 36
+bpm = bpm.to_f
+use_bpm bpm
+
+# 18 notes in the full riff
+satie_riff = [:C2, :A2, :Cs2, :Bb2, :Ds2,
+              :G2, :D2, :C2, :Ds2, :Gb2, :Cs2,
+              :F2, :B2, :Gb2, :Ds2, :B2, :E2, :E2]
+the_riff = satie_riff # .take(8)
+num_notes = the_riff.length
+
+define :all_the_minutes do |activity|
+  all_the_minutes = []
+  unless activity.nil?
+    activity.each do |branch, types|
+      unless types.nil?
+        types.each do |type, minutes|
+          all_the_minutes << minutes
+        end
+      end
+    end
+  end
+  all_the_minutes.flatten!
+end
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :the_bass_line do |placement, reverb|
+  with_fx :reverb, room: reverb do
+    the_riff.each do |note|
+      play note, pan: placement
+      sleep 1
+    end
+  end
+end
+
+define :the_phase do |minutes|
+  # reps = minutes * ( bpm / num_notes) + 1
+  puts "Minutes = #{minutes}"
+
+  cycles_per_minute = (bpm/num_notes).to_i
+
+  phase_delay = num_notes / minutes / bpm
+  puts "Phase delay = #{phase_delay}"
+
+  pan = rrand(0.2, 0.6)
+  reverb = rrand(0.2, 0.8)
+
+  # sleep rrand(0.001, 0.005)
+
+  play_in_a_thread do
+    # Home riff
+    minutes.times do
+      cycles_per_minute.times do
+        the_bass_line(-0.1 - pan, reverb)
+      end
+    end
+  end
+
+  play_in_a_thread do
+    # Phased riff
+    (minutes * cycles_per_minute - 1).times do
+      the_bass_line(0.1 + pan, reverb)
+      sleep phase_delay
+    end
+    1.times do
+      # Play the riff but drop the last note
+      # Make this part of the function?
+      with_fx :reverb, room: reverb do
+        the_riff.take(num_notes - 1).each do |note|
+          play note, pan: 0.1 + pan
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+loop do
+  activity = JSON.parse(File.read(file))
+  log_raw "#{composition}: #{activity}\n"
+  unless activity.size == 0
+    all_the_minutes(activity).each do |minutes|
+      log_raw "#{minutes}\n"
+      play_in_a_thread do
+        the_phase(minutes)
+      end
+    end
+  end
+  sleep refresh_minutes * bpm
+end

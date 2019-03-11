@@ -19,3 +19,5 @@
 + Move through the circle of fifths, or some other progression
 + Tick per minute as a basis to really keep things locked.
 + Satie's "Vexations;" every minute of activity is another minute played
++ Tristan: the Tristan chord (in different octaves), note by note
++ Staplers:  samples of staplers from the different libraries, making a percussive cacophany

@@ -19,7 +19,7 @@ use_synth :fm
 minutes = 1
 
 # file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
-file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+file = ENV['HOME'] + "/src/staplr/data/live/activity.json"
 
 bpm = 60
 use_bpm bpm

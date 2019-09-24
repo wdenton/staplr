@@ -21,7 +21,7 @@ use_synth :piano
 minutes = 1
 
 # file = ENV['HOME'] + "/src/staplr/test-durations/test.json"
-file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+file = ENV['HOME'] + "/src/staplr/data/live/activity.json"
 
 bpm = 32
 bpm = bpm * 1.0

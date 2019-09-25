@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    docopt (0.6.1)
     mini_portile2 (2.3.0)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
@@ -12,8 +13,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  docopt
   nokogiri
   sonic-pi-cli
 
 BUNDLED WITH
-   1.16.4
+   1.17.2

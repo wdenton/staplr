@@ -15,7 +15,7 @@ use_debug false
 use_random_seed Time.now.to_i
 
 # file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
-file = ENV['HOME'] + "/src/staplr/staplr-branch-activity-01.json"
+file = ENV['HOME'] + "/src/staplr/data/live/activity.json"
 
 # How often the data file refreshes, and so how often
 # the main loop loops.

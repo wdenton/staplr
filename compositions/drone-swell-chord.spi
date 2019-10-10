@@ -29,6 +29,11 @@ pitches = [nil, 0, 7, 12, 16, 19]
 activity = Hash.new
 
 branch_settings = {
+  "ASC" => {
+    "starting_note" => :C2,
+    "synth" => :subpulse,
+    "pan" => 0.75
+  },
   "Ask a Librarian" => {
     "starting_note" => :C4,
     "synth" => :prophet,
@@ -73,11 +78,6 @@ branch_settings = {
     "starting_note" => :C4,
     "synth" => :hoover,
     "pan" => 0.5
-  },
-  "ASC" => {
-    "starting_note" => :C2,
-    "synth" => :subpulse,
-    "pan" => 0.75
   },
   "SMIL" => {
     "starting_note" => :c2,

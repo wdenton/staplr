@@ -29,6 +29,11 @@ pitches = [nil, 0, 7, 12, 16, 19]
 activity = Hash.new
 
 branch_settings = {
+  "Ask a Librarian" => {
+    "starting_note" => :C4,
+    "synth" => :prophet,
+    "pan" => 0.25
+  },
   "AskUs" => {
     "starting_note" => :C2,
     "synth" => :prophet,
@@ -43,6 +48,11 @@ branch_settings = {
     "starting_note" => :C3,
     "synth" => :blade,
     "pan" => -0.6
+  },
+  "Facilities" => {
+    "starting_note" => :C4,
+    "synth" => :blade,
+    "pan" => 0.6
   },
   "Frost" => {
     "starting_note" => :C3,
@@ -106,8 +116,16 @@ loop do
   activity = JSON.parse(File.read(file))
   log_raw "#{composition}: #{activity}\n"
 
+  in_thread(name: :askalibrarian) do
+    play_branch ("Ask a Librarian")
+  end
+
   in_thread(name: :askus) do
     play_branch ("AskUs")
+  end
+
+  in_thread(name: :asc) do
+    play_branch("ASC")
   end
 
   in_thread(name: :bronfman) do
@@ -116,6 +134,10 @@ loop do
 
   in_thread(name: :buildingservices) do
     play_branch ("BuildingServices")
+  end
+
+  in_thread(name: :facilities) do
+    play_branch("Facilities")
   end
 
   in_thread(name: :frost) do
@@ -130,16 +152,12 @@ loop do
     play_branch("Scott")
   end
 
-  in_thread(name: :steacie) do
-    play_branch("Steacie")
-  end
-
-  in_thread(name: :asc) do
-    play_branch("ASC")
-  end
-
   in_thread(name: :smil) do
     play_branch("SMIL")
+  end
+
+  in_thread(name: :steacie) do
+    play_branch("Steacie")
   end
 
   sleep minutes * bpm

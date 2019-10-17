@@ -15,16 +15,28 @@ INPUT="raw/scott-3-20170622.flac"
 
 LENGTH=`soxi -D $INPUT`
 
-for I in `seq -w 01 59`;
+for I in `seq -w 30 60`;
 do
     echo $I
-    sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-${I}.flac trim ${I}:00 01:00 fade t 1 -0 1
+    sox --norm=-6 raw/scott-3-20170622.flac --compression 160 samples/L01-scott-A-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
 done
 
-for I in `seq -w 01 59`;
+for I in `seq -w 50 80`;
 do
     echo $I
-    sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-${I}.flac trim ${I}:00 01:00 fade t 1 -0 1
+    sox --norm=-6 raw/scott-atrium-20190830.flac --compression 160 samples/L01-scott-B-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
+done
+
+for I in `seq -w 15 45`;
+do
+    echo $I
+    sox --norm=-6 raw/scott-4-20190830.flac --compression 160 samples/L01-scott-C-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
+done
+
+for I in `seq -w 01 30`;
+do
+    echo $I
+    sox --norm=-6 raw/steacie-ref-20190829.flac --compression 160 samples/L01-steacie-A-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
 done
 #+end_src
 
@@ -92,65 +104,65 @@ done
 
 # echo $LENGTH
 
-sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-01.flac trim 05:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-02.flac trim 15:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-03.flac trim 25:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-04.flac trim 35:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-05.flac trim 45:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-01.mp3 trim 05:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-02.mp3 trim 15:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-03.mp3 trim 25:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-04.mp3 trim 35:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-05.mp3 trim 45:00 01:00 fade t 1 -0 1
 
-sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-01.flac trim 01:10:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-02.flac trim 01:20:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-03.flac trim 01:30:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-04.flac trim 01:40:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-05.flac trim 01:50:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-01.mp3 trim 01:10:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-02.mp3 trim 01:20:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-03.mp3 trim 01:30:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-04.mp3 trim 01:40:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L03-scott-05.mp3 trim 01:50:00 03:00 fade t 1 -0 1
 
-sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-01.flac trim 02:10:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-02.flac trim 02:20:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-03.flac trim 02:30:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-04.flac trim 02:40:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-05.flac trim 02:50:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-01.mp3 trim 02:10:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-02.mp3 trim 02:20:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-03.mp3 trim 02:30:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-04.mp3 trim 02:40:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L05-scott-05.mp3 trim 02:50:00 05:00 fade t 1 -0 1
 
-sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-01.flac trim 01:15:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-02.flac trim 01:30:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-03.flac trim 01:45:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-04.flac trim 02:00:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-05.flac trim 02:15:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-01.mp3 trim 01:15:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-02.mp3 trim 01:30:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-03.mp3 trim 01:45:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-04.mp3 trim 02:00:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/scott-3-20170622.flac samples/L08-scott-05.mp3 trim 02:15:00 08:00 fade t 1 -0 1
 
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-01.flac trim 02:30:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-02.flac trim 02:45:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-03.flac trim 03:00:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-04.flac trim 03:15:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-05.flac trim 03:30:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-01.mp3 trim 02:30:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-02.mp3 trim 02:45:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-03.mp3 trim 03:00:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-04.mp3 trim 03:15:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-scott-05.mp3 trim 03:30:00 10:00 fade t 1 -0 1
 
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-01.flac trim 05:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-02.flac trim 15:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-03.flac trim 25:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-04.flac trim 35:00 01:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-05.flac trim 45:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-01.mp3 trim 05:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-02.mp3 trim 15:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-03.mp3 trim 25:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-04.mp3 trim 35:00 01:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-05.mp3 trim 45:00 01:00 fade t 1 -0 1
 
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-01.flac trim 10:10:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-02.flac trim 20:20:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-03.flac trim 30:30:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-04.flac trim 40:40:00 03:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-05.flac trim 50:50:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-01.mp3 trim 10:10:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-02.mp3 trim 20:20:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-03.mp3 trim 30:30:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-04.mp3 trim 40:40:00 03:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L03-steacie-05.mp3 trim 50:50:00 03:00 fade t 1 -0 1
 
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-01.flac trim 00:50:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-02.flac trim 00:55:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-03.flac trim 01:00:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-04.flac trim 01:05:00 05:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-05.flac trim 01:10:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-01.mp3 trim 00:50:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-02.mp3 trim 00:55:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-03.mp3 trim 01:00:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-04.mp3 trim 01:05:00 05:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L05-steacie-05.mp3 trim 01:10:00 05:00 fade t 1 -0 1
 
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-01.flac trim 00:00:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-02.flac trim 00:15:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-03.flac trim 00:30:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-04.flac trim 00:45:00 08:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-05.flac trim 01:00:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-01.mp3 trim 00:00:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-02.mp3 trim 00:15:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-03.mp3 trim 00:30:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-04.mp3 trim 00:45:00 08:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L08-steacie-05.mp3 trim 01:00:00 08:00 fade t 1 -0 1
 
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-01.flac trim 00:30:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-02.flac trim 00:40:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-03.flac trim 00:50:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-04.flac trim 01:00:00 10:00 fade t 1 -0 1
-sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-05.flac trim 01:10:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-01.mp3 trim 00:30:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-02.mp3 trim 00:40:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-03.mp3 trim 00:50:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-04.mp3 trim 01:00:00 10:00 fade t 1 -0 1
+sox --norm=-6 raw/steacie-ref-20190829.flac samples/L10-steacie-05.mp3 trim 01:10:00 10:00 fade t 1 -0 1
 
 
 + 01 mins:  fade in 1

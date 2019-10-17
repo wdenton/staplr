@@ -2,7 +2,7 @@
 
 # Library Silences
 
-composition = "Library Silences 0.5"
+composition = "Library Silences 0.6"
 
 require 'json'
 
@@ -47,7 +47,7 @@ end
 define :play_a_silence do |minutes|
 
   minutes.times do
-    sample silence_samples, "L01", rrand_i(0, 118)
+    sample silence_samples, "L01", rrand_i(0, 118), pan: rrand(-0.6, 0.6)
     sleep bpm
   end
 

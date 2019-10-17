@@ -5,6 +5,9 @@
 
 + 25-scott-01.flac comes from scott-library-floor-3-20170622.flac
 
+
+Samples must be FLAC, OGG, WAV (or a couple of other formats), but can't be MP3.
+
 # sox --show-progress --combine mix "staplr-${YYYYMM}??.ogg" "$MP3" gain +12 trim 0:00:00 11:00:00 fade t 01:00 11:00:00 05:00
 
 #+begin_src shell :dir /media/wtd/ART_DATA/Libraries/STAPLR/
@@ -18,25 +21,25 @@ LENGTH=`soxi -D $INPUT`
 for I in `seq -w 30 60`;
 do
     echo $I
-    sox --norm=-6 raw/scott-3-20170622.flac --compression 160 samples/L01-scott-A-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
+    sox --norm=-6 raw/scott-3-20170622.flac --compression 6 samples/L01-scott-A-${I}.ogg trim ${I}:00 01:01 fade t 1 -0 1
 done
 
 for I in `seq -w 50 80`;
 do
     echo $I
-    sox --norm=-6 raw/scott-atrium-20190830.flac --compression 160 samples/L01-scott-B-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
+    sox --norm=-6 raw/scott-atrium-20190830.flac --compression 6 samples/L01-scott-B-${I}.ogg trim ${I}:00 01:01 fade t 1 -0 1
 done
 
 for I in `seq -w 15 45`;
 do
     echo $I
-    sox --norm=-6 raw/scott-4-20190830.flac --compression 160 samples/L01-scott-C-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
+    sox --norm=-6 raw/scott-4-20190830.flac --compression 6 samples/L01-scott-C-${I}.ogg trim ${I}:00 01:01 fade t 1 -0 1
 done
 
 for I in `seq -w 01 30`;
 do
     echo $I
-    sox --norm=-6 raw/steacie-ref-20190829.flac --compression 160 samples/L01-steacie-A-${I}.mp3 trim ${I}:00 01:01 fade t 1 -0 1
+    sox --norm=-6 raw/steacie-ref-20190829.flac --compression 6 samples/L01-steacie-A-${I}.ogg trim ${I}:00 01:01 fade t 1 -0 1
 done
 #+end_src
 

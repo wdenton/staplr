@@ -46,10 +46,12 @@ end
 
 define :play_a_silence do |minutes|
 
-  minutes.times do
-    sample silence_samples, "L01", rrand_i(0, 123), pan: rrand(-0.6, 0.6)
-    # Every sample is 60 seconds long, and we're using 60 bpm, so sleep that long
-    sleep bpm
+  play_in_a_thread do
+    minutes.times do
+      sample silence_samples, "L01", rrand_i(0, 123), pan: rrand(-0.8, 0.8)
+      # Every sample is 60 seconds long, and we're using 60 bpm, so sleep that long
+      sleep bpm
+    end
   end
 
   #  if minutes == 1 then

@@ -15,7 +15,7 @@ refresh_minutes = 1
 file = ENV['HOME'] + "/src/staplr/data/live/activity.json"
 
 # silence_samples = "/media/wtd/ART_DATA/Libraries/STAPLR/Silences/samples"
-silence_samples = ENV['HOME'] + "/Silences/samples"
+silence_samples = "/var/Silences/samples"
 
 bpm = 60
 bpm = bpm.to_f
@@ -48,7 +48,7 @@ define :play_a_silence do |minutes|
 
   play_in_a_thread do
     minutes.times do
-      sample silence_samples, "L01", rrand_i(0, 123), pan: rrand(-0.8, 0.8)
+      sample silence_samples, "L01", rrand_i(0, 151), pan: rrand(-0.8, 0.8)
       # Every sample is 60 seconds long, and we're using 60 bpm, so sleep that long
       sleep bpm
     end

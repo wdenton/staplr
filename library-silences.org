@@ -23,10 +23,12 @@ do
     sox --norm=-6 raw/scott-3-20170622.flac samples/L01-scott-A-${I}.wav trim ${I}:00 01:01 fade t 1 -0 1
 done
 
-for I in `seq -w 50 80`;
+# Scott atrium (30 August 2019)
+# Some voices here and there; lots of noises from windows or something flapping at the roof
+for I in `seq -w 71 80`;
 do
     echo $I
-    sox --norm=-6 raw/scott-atrium-20190830.flac samples/L01-scott-B-${I}.wav trim ${I}:00 01:01 fade t 1 -0 1
+    sox --norm=-6 /media/wtd/ART_DATA/FieldRecordings/libraries/20190830-york-scott-atrium-afternoon-h5.flac samples/L01-scott-B-${I}.wav trim ${I}:00 01:01 fade t 1 -0 1
 done
 
 for I in `seq -w 15 45`;
@@ -40,6 +42,23 @@ do
     echo $I
     sox --norm=-6 raw/steacie-ref-20190829.flac samples/L01-steacie-A-${I}.wav trim ${I}:00 01:01 fade t 1 -0 1
 done
+
+# Archives vault (21 October 2019)
+# Completely HVAC (but for top and tail, with voices)
+for I in `seq -w 30 60`;
+do
+    echo $I
+    sox --norm=-6 /media/wtd/ART_DATA/FieldRecordings/libraries/20191021-yorku-archives-vault.flac samples/L01-archives-A-${I}.wav trim ${I}:00 01:01 fade t 1 -0 1
+done
+
+# Scott stacks (11 May 2017)
+# Some voices heard here and there
+for I in `seq -w 30 60`;
+do
+    echo $I
+    sox --norm=-6 /media/wtd/ART_DATA/FieldRecordings/libraries/20170511-scott-unknown-floor.flac samples/L01-scott-D-${I}.wav trim ${I}:00 01:01 fade t 1 -0 1
+done
+
 #+end_src
 
 #+RESULTS:

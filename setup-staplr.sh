@@ -99,10 +99,10 @@ sleep 2
 ## Sonic Pi
 ##
 
-echo "Sonic Pi ... (then sleeping)"
+echo "Sonic Pi ... (then sleeping 30) ..."
 tmux new-window -t staplr:3 -n "sonic-pi"
 tmux send-keys -t staplr:3 "xvfb-run sonic-pi" "C-m"
-sleep 10
+sleep 30
 
 ##
 ## DarkIce

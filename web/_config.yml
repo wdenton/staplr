@@ -1,0 +1,12 @@
+name: STAPLR
+description: William Denton
+url: https://www.staplr.org
+
+markdown: redcarpet
+
+timezone: America/Toronto
+encoding: UTF-8
+
+destination: /var/www/staplr.org/htdocs/
+
+exclude: ['Makefile', 'Gemfile', 'Gemfile.lock']

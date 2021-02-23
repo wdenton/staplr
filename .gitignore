@@ -1,2 +1,5 @@
 *~
 data/live/activity.json
+web/.jekyll-cache
+web/js/vendor
+web/Gemfile.lock

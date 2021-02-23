@@ -1,5 +1,7 @@
 /*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
 
+@import url("baskerville.css")
+
 html {
     color: #black;
     font-size: 1em;
@@ -57,7 +59,8 @@ textarea {
    ========================================================================== */
 
 body {
-    font: 20px/26px sans-serif;
+    font-family: 'Libre Baskerville', serif;
+    font: 20px/26px;
     background: #f7c7ce; /* champagne */
 }
 

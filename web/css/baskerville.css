@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'Libre Baskerville';
+    font-style: normal;
+    font-weight: 400;
+    src:
+	local('Libre Baskerville'),
+	local('LibreBaskerville-Regular'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxM.woff2 */
+	url('Libre_Baskerville_400.woff2') format('woff2'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxU.woff */
+	url('Libre_Baskerville_400.woff') format('woff'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxc.eot */
+	url('Libre_Baskerville_400.eot?#iefix') format('embedded-opentype'),
+	/* from https://fonts.gstatic.com/l/font?kit=kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxQ&skey=1ccff9706b4dcbb3&v=v5#LibreBaskerville */
+	url('Libre_Baskerville_400.svg#LibreBaskerville') format('svg'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxY.ttf */
+	url('Libre_Baskerville_400.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Libre Baskerville';
+    font-style: italic;
+    font-weight: 400;
+    src:
+	local('Libre Baskerville Italic'),
+	local('LibreBaskerville-Italic'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWxEQDA.woff2 */
+	url('Libre_Baskerville_400italic.woff2') format('woff2'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWxEQCg.woff */
+	url('Libre_Baskerville_400italic.woff') format('woff'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWxEQCA.eot */
+	url('Libre_Baskerville_400italic.eot?#iefix') format('embedded-opentype'),
+	/* from https://fonts.gstatic.com/l/font?kit=kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWxEQCw&skey=44cd15477bf5bb2d&v=v5#LibreBaskerville */
+	url('Libre_Baskerville_400italic.svg#LibreBaskerville') format('svg'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWxEQCQ.ttf */
+	url('Libre_Baskerville_400italic.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Libre Baskerville';
+    font-style: normal;
+    font-weight: 700;
+    src:
+	local('Libre Baskerville Bold'),
+	local('LibreBaskerville-Bold'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcA.woff2 */
+	url('Libre_Baskerville_700.woff2') format('woff2'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcY.woff */
+	url('Libre_Baskerville_700.woff') format('woff'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcQ.eot */
+	url('Libre_Baskerville_700.eot?#iefix') format('embedded-opentype'),
+	/* from https://fonts.gstatic.com/l/font?kit=kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3Kcc&skey=c168ba7fe84b1774&v=v5#LibreBaskerville */
+	url('Libre_Baskerville_700.svg#LibreBaskerville') format('svg'),
+	/* from https://fonts.gstatic.com/s/librebaskerville/v5/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcU.ttf */
+	url('Libre_Baskerville_700.ttf') format('truetype');
+}

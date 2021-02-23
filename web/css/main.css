@@ -57,12 +57,14 @@ textarea {
    ========================================================================== */
 
 body {
-    font: 16px/26px sans-serif;
+    font: 20px/26px sans-serif;
+    background: #f7c7ce; /* champagne */
 }
 
 .wrapper {
     width: 90%;
     margin: 0 5%;
+    /* border: thick solid red; */
 }
 
 /* ===================
@@ -70,6 +72,8 @@ body {
    =================== */
 
 .header-container {
+    margin-top: 5%;
+    font-size: xx-large;
     /* border-bottom: 10px solid #9792ed; */
 }
 
@@ -78,15 +82,9 @@ body {
     /* border-top: 10px solid #9792ed; */
 }
 
-.header-container,
-.footer-container,
-.main aside {
-    background: white;
-}
-
 .title {
-    color: black;
-    font-variant: small-caps;
+    /* color: black; */
+    /* font-variant: small-caps; */
 }
 
 /* ==============
@@ -126,12 +124,12 @@ nav a:hover {
    ============== */
 
 .main {
-    padding: 30px 0;
+    padding: 0 0;
 }
 
 .main article h1 {
     font-size: 2em;
-    font-variant: small-caps;
+    /* font-variant: small-caps; */
 }
 
 .main aside {
@@ -144,29 +142,27 @@ nav a:hover {
     padding: 20px 0;
 }
 
-/* ===============
-    ALL: IE Fixes
-   =============== */
-
-.ie7 .title {
-    padding-top: 20px;
-}
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 
-
 h1, h2, h3 {
-    font-variant: small-caps;
+    /* font-variant: small-caps; */
 }
 
+.centered {
+    text-align: center;
+}
 
+#composition {
+    /* border: thin solid black; */
+    text-align: center;
+}
 
-
-
-
-
+footer {
+    font-size: small;
+    margin-top: 5%;
+}
 
 
 
@@ -229,7 +225,7 @@ h1, h2, h3 {
    ============ */
 
     .title {
-        float: left;
+        text-align: center;
     }
 
     nav {
@@ -242,14 +238,11 @@ h1, h2, h3 {
    ============ */
 
     .main article {
-        float: left;
+        /* float: left;*/
+	margin: auto;
         width: 85%;
     }
 
-    /* .main aside { */
-    /*     float: right; */
-    /*     width: 28%; */
-    /* } */
 }
 
 @media only screen and (min-width: 1140px) {
@@ -261,6 +254,7 @@ h1, h2, h3 {
     .wrapper {
         width: 1026px; /* 1140px - 10% for margins */
         margin: 0 auto;
+	/* border: thin solid green; */
     }
 }
 
@@ -314,7 +308,7 @@ h1, h2, h3 {
 
 /* ==========================================================================
    Print styles
-   ========================================================================== */
+   ========================================ndu================================== */
 
 @media print {
     *,

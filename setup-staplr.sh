@@ -91,10 +91,6 @@ tmux new-window -t staplr:2 -n "jack"
 tmux send-keys -t staplr:2 "dbus-launch jackd -dalsa -dhw:0 -r44100 -p1024 -n2" "C-m"
 sleep 2
 
-# On 14.04 I had to run this, because I had the new jackd in my home dir:
-# tmux send-keys -t staplr:2 "cd ~/jack2/build/linux/; ./jackd -dalsa -dhw:0 -r44100 -p1024 -n2" "C-m"
-# ^^ Delete when I'm sure everything is working.
-
 ##
 ## Sonic Pi
 ##
@@ -110,11 +106,11 @@ sleep 30
 
 echo "DarkIce ..."
 tmux new-window -t staplr:4 -n "darkice"
-tmux send-keys -t staplr:4 "darkice -c darkice-wdenton.cfg" "C-m"
+tmux send-keys -t staplr:4 "darkice -c darkice/wdenton2.cfg" "C-m"
 sleep 2
 
 echo "Connecting SuperCollider and Darkice ..."
-tmux send-keys -t staplr:1 "./connect-darkice.sh" "C-m"
+tmux send-keys -t staplr:1 "darkice/connect.sh" "C-m"
 
 ##
 ## Play the composition

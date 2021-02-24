@@ -2,22 +2,28 @@
 #+AUTHOR: William Denton
 #+EMAIL: wtd@pobox.com
 
-#+OPTIONS: num:nil toc:nil ^:nil
-#+STARTUP: content align shrink showall
-
 * Introduction
 
+* Requirements
+
 * Installation
+
+* Compositions
+
++ 22 Feb 2021: "Vexation After Vexation 1.0"
++ xx Feb 2021: "Phasers on Satie (Long Phase) 1.2"
++ 16 Oct 2019: "Library Silences 0.5"
++ ...
++ ...
++ 25 Aug 2016: "Drone Swell Chord 1.1"
++ 11 Jan 2016: launched
 
 * Ideas for future sounds
 
 + In C (record a lot of them then play them all on top of each other---Music at the Same Time)
 + One sound, but extended or shorted (like "Convergence Machine," sort of), perhaps Bach's first cello suite
 + Bird song, so it sounds like a single bird or the whole dawn chorus.
-+ Kushaqua sounds
-+ Silences from the desk in question, or just ambient sound from that library
 + Move through the circle of fifths, or some other progression
 + Tick per minute as a basis to really keep things locked.
-+ Satie's "Vexations;" every minute of activity is another minute played
 + Tristan: the Tristan chord (in different octaves), note by note
 + Staplers:  samples of staplers from the different libraries, making a percussive cacophany

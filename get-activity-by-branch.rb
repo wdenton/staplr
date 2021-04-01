@@ -1,13 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # CONFIGURING
 
 require "cgi"
 require "csv"
 require "json"
-require "open-uri"
 
 require "docopt"
+require "http"
 require "nokogiri"
 
 doc = <<DOCOPT
@@ -18,11 +19,14 @@ doc = <<DOCOPT
 
   Options:
     --minutes <min>   Get data for most recent time span [default: 30]
-    --askus           Include AskUs? [default: false]
-    --building        Include Building Services? [default: false]
-    --circ            Include circulation desks? [default: false]
     --verbose         Be verbose [default: false]
 DOCOPT
+
+# Keep all desks by default; I'm removing these options.  Keep around for now
+# until I clean this up.
+# --askus           Include AskUs? [default: false]
+# --building        Include Building Services? [default: false]
+# --circ            Include circulation desks? [default: false]
 
 options = Docopt.docopt(doc)
 
@@ -41,12 +45,12 @@ tweet_csv_url = data_url +
                 "&date2=#{CGI.escape(end_time)}"
 
 if options["--verbose"]
-  STDERR.puts "Start: #{t_start.strftime('%F %R')}"
-  STDERR.puts "End:   #{t_end.strftime('%F %R')}"
+  warn "Start: #{t_start.strftime('%F %R')}"
+  warn "End:   #{t_end.strftime('%F %R')}"
 end
 
 if ENV["LIBSTATS_LOGIN_COOKIE"].nil?
-  STDERR.puts "No LibStats cookie known (please set $LIBSTATS_LOGIN_COOKIE)"
+  warn "No LibStats cookie known (please set $LIBSTATS_LOGIN_COOKIE)"
   exit 0
 end
 
@@ -54,53 +58,32 @@ end
 # https://stackoverflow.com/questions/5544858/accessing-elements-of-nested-hashes-in-ruby
 activity = Hash.new { |h, k| h[k] = Hash.new { |hh, kk| hh[kk] = [] } }
 
-# activity = {
-#   "ASC"      => {},
-#   "Bronfman" => {},
-#   "Frost"    => {},
-#   "Maps"     => {},
-#   "Scott"    => {},
-#   "SMIL"     => {},
-#   "Steacie"  => {},
-# }
-
-# activity = Array.new(6) { Array.new(0) } # Create array of 6 empty arrays
-
 data = ""
 
 begin
-  open(tweet_csv_url,
-       "Cookie" => "login=#{ENV['LIBSTATS_LOGIN_COOKIE']}") do |f|
-    if f.status[0] != "200"
-      STDERR.puts "Could not download data: status #{f.status}"
-    end
-    data = f.read
-  end
+  response = HTTP.cookies(login: ENV["LIBSTATS_LOGIN_COOKIE"]).get(tweet_csv_url)
+  warn "Could not download data: status #{response.status}" unless response.status.success?
+  data = response.to_s
 rescue StandardError => e
-  STDERR.puts "Could not download data: #{e}"
+  warn "Could not download data: #{e}"
   exit 0
 end
 
-STDERR.puts data if options["--verbose"]
+warn data if options["--verbose"]
 
 if data == "\n"
   # LibStats returns a newline if there is no data ... inelegant,
   # but we can deal with it.
-  STDERR.puts "Questions: 0" if options["--verbose"]
+  warn "Questions: 0" if options["--verbose"]
 else
   csv = CSV.parse(data, headers: true, header_converters: :symbol)
 
-  unless options["--askus"]
-    csv.delete_if { |row| row[:library_name] == "AskUs" }
-  end
+  # Keep all desks by default.
+  # csv.delete_if { |row| row[:library_name] == "AskUs" } unless options["--askus"]
+  # csv.delete_if { |row| row[:library_name] == "BuildingServices" } unless options["--building"]
+  # csv.delete_if { |row| row[:location_name] == "Circulation Desk" } unless options["--circ"]
 
-  unless options["--building"]
-    csv.delete_if { |row| row[:library_name] == "BuildingServices" }
-  end
-
-  unless options["--circ"]
-    csv.delete_if { |row| row[:location_name] == "Circulation Desk" }
-  end
+  # TODO: Refactor this as per  https://github.com/rubocop/rubocop/issues/8247
 
   unless csv.empty?
     csv.each do |row|

@@ -98,11 +98,9 @@ end
 
 loop do
   activity = JSON.parse(File.read(file))
-  log_raw "Activity: #{activity}" # Debugging
   unless activity.size == 0
     question_minutes += all_the_minutes(activity).sum
   end
-  log_raw "Minutes: #{question_minutes}" # Debugging
   log_raw "#{composition}: #{activity} (#{question_minutes} mins)\n"
   unless (question_minutes == 0) then
     play_in_a_thread do

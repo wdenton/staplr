@@ -25,5 +25,6 @@ if [[ $diff -gt $trouble_seconds ]]
 then
     echo "STAPLR jammed about $diff seconds ago!  Restarting."
     cp -p ${errors_log} ${errors_log}.${last_modified}
+    cp -p ${debug_log} ${debug_log}.${last_modified}
     ${HOME}/src/staplr/setup-staplr.sh ${HOME}/src/staplr/compositions/current.spi
 fi

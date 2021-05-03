@@ -1,0 +1,82 @@
+# sonic_pi
+
+composition = "Pandemic Drone 0.8"
+
+# COMMENT: Build up a huge massive chord using randomly chosen synths
+# Branch: choose randomly
+# Type: choose randomly
+# Duration: duration of sound
+
+# Copyright William Denton <wtd@pobox.com> 2021
+
+require 'json'
+
+use_debug false
+use_random_seed Time.now.to_i
+
+activity = Hash.new
+
+use_synth :fm
+
+minutes = 1
+
+# file = ENV['HOME'] + "/src/staplr/test-durations/not-a-lot.json"
+file = ENV['HOME'] + "/src/staplr/data/live/activity.json"
+
+bpm = 60
+use_bpm bpm
+
+base_chord = [:Bb2, :Bb3, :Bb4]
+synths = [:subpulse, :prophet, :growl, :blade, :fm, :sine, :mod_fm, :hoover]
+
+define :all_the_minutes do |activity|
+  all_the_minutes = []
+  unless activity.nil?
+    activity.each do |branch, types|
+      unless types.nil?
+        types.each do |type, minutes|
+          all_the_minutes << minutes
+        end
+      end
+    end
+  end
+  all_the_minutes.flatten!
+end
+
+define :play_in_a_thread do |&block|
+  in_thread do
+    block.call
+  end
+end
+
+define :play_note do |minutes|
+  this_synth = synths.choose
+  log_raw "#{composition}: Mins #{minutes} Synth #{this_synth}\n"
+  play_in_a_thread do
+    use_synth this_synth
+    with_fx :reverb do
+      play (chord base_chord.choose, :m9).choose,
+        amp: rrand(0.6, 0.9),
+        attack: bpm * minutes.to_f/4,
+        sustain: bpm * minutes.to_f/2,
+        release: bpm * minutes.to_f/4,
+        pan: rrand(-0.9, 0.9)
+    end
+  end
+end
+
+loop do
+  begin
+    data = File.read(file)
+    activity = JSON.parse(data)
+  rescue JSON::ParserError
+    log_raw "Error! Data: '#{data}'\n"
+  end
+  unless activity.size == 0
+    log_raw "#{composition}: #{activity} \n"
+    all_the_minutes(activity).each do |minutes|
+      play_note(minutes)
+    end
+    sleep bpm
+  end
+end

@@ -6,17 +6,17 @@
 
 # Set up and configure everything necessary for Sonic Pi to run
 # headless, play a composition from a script, and stream the output
-# to DarkIce so it can be broadast.
+# to DarkIce so it can be broadcast.
 
 # The script takes one argument: the name of the composition to be used
-
 if [ "$#" -ne 1 ]; then
     echo "Specify a composition"
     exit 1
 fi
 COMPOSITION=$1
 
-cd ~/src/staplr/ || exit
+# Move to directory where script is called.  Always ~/src/staplr/ for me.
+cd "$(dirname "$0")" || exit
 
 ##
 ## Kernel module snd_aloop

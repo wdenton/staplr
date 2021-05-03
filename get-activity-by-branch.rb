@@ -54,6 +54,17 @@ if ENV["LIBSTATS_LOGIN_COOKIE"].nil?
   exit 0
 end
 
+# Map the way the time_spent is recorded to actual minutes we can use.
+TIMES = {
+  "0-1 minute" => 1,
+  "1-5 minutes" => 3,
+  "5-10 minutes" => 8,
+  "10-20 minutes" => 15,
+  "20-30 minutes" => 25,
+  "30-60 minutes" => 40,
+  "60+ minutes" => 65
+}.freeze
+
 # Thank you again, Stack Overflow.  Created a hash of hashes of an array.
 # https://stackoverflow.com/questions/5544858/accessing-elements-of-nested-hashes-in-ruby
 activity = Hash.new { |h, k| h[k] = Hash.new { |hh, kk| hh[kk] = [] } }
@@ -87,17 +98,8 @@ else
 
   unless csv.empty?
     csv.each do |row|
-      time = case row[:time_spent]
-             when "0-1 minute"    then 1
-             when "1-5 minutes"   then 3
-             when "5-10 minutes"  then 8
-             when "10-20 minutes" then 15
-             when "20-30 minutes" then 25
-             when "30-60 minutes" then 40
-             when "60+ minutes"   then 65
-             end
+      time = TIMES[row[:time_spent]]
       type = row[:question_type][0].to_i
-
       activity[row[:library_name]][type] << time
     end
   end

@@ -1,3 +1,6 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'jekyll'
+gem "base64"
+gem "bigdecimal"
+gem "csv"
+gem "jekyll"
